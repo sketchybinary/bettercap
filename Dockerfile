@@ -26,3 +26,4 @@ WORKDIR /app
 
 EXPOSE 80 443 53 5300 8080 8081 8082 8083 8000
 ENTRYPOINT ["/app/bettercap"]
+CMD -no-colors -eval "caplets.update; ui.update;" -caplet https-ui
