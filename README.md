@@ -44,6 +44,8 @@ For this reason, **any version prior to 2.x is considered deprecated** and any t
 
 The project is documented [here](https://www.bettercap.org/).
 
+## Kubernetes
+To deploy on kubernetes using the prebuilt image quay.io/sketchybinary/bettercap, simply update bettercap.yaml with your own ingress information and password, then `kubectl apply -f bettercap.yaml`.  After the container is running, you can use `iw phy "$PHY" set netns "$PID"` to grant the bettercap container namespace access to your wireless device. Find $PHY from the interface name by running `iw wlp5s0 info` and looking at the 'wiphy' parameter.  For example, "wiphy0" becomes "phy0".
 ## License
 
 `bettercap` is made with ♥  by [the dev team](https://github.com/orgs/bettercap/people) and it's released under the GPL 3 license.

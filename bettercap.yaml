@@ -54,11 +54,12 @@ spec:
       containers:
       - image: quay.io/sketchybinary/bettercap:latest
         name: bettercap
+        securityContext:
+          privileged: true
         args:
           - "-no-colors"
           - "-eval"
           -  >
-              ui.update;
               set http.server.address 0.0.0.0;
               set http.server.port 80;
               set api.rest.address 0.0.0.0;
