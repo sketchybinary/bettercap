@@ -1,0 +1,81 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: traefik
+  labels:
+    app: bettercap
+  name: bettercap-ingress
+spec:
+  rules:
+  - host: bettercap.k3s.sketchybinary.com
+    http:
+      paths:
+      - path : /api
+        backend:
+          serviceName: bettercap-service
+          servicePort: api
+      - backend:
+          serviceName: bettercap-service
+          servicePort: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bettercap-service
+  namespace: default
+spec:
+  selector:
+    app: bettercap
+  ports:
+  - protocol: TCP
+    port: 80
+    name: http
+  - protocol: TCP
+    port: 8081
+    name: api
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: bettercap
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bettercap
+  template:
+    metadata:
+      labels:
+        app: bettercap
+    spec:
+      containers:
+      - image: quay.io/sketchybinary/bettercap:latest
+        name: bettercap
+        args:
+          - "-no-colors"
+          - "-eval"
+          -  >
+              ui.update;
+              set http.server.address 0.0.0.0;
+              set http.server.port 80;
+              set api.rest.address 0.0.0.0;
+              set api.rest.port 8081;
+              set http.server.path /usr/local/share/bettercap/ui;
+              set api.rest.username wolf;
+              set api.rest.password fire;
+              api.rest on;
+              http.server on;
+        ports:
+        - containerPort: 8081
+          name: api
+        - containerPort: 80
+          name: http
+        livenessProbe:
+          httpGet:
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 30
+---
