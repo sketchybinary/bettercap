@@ -23,6 +23,7 @@ RUN apk add --no-cache --update bash iproute2 libpcap libusb-dev libnetfilter_qu
 COPY --from=build-env /go/src/github.com/bettercap/bettercap/bettercap /app/
 COPY --from=build-env /go/src/github.com/bettercap/bettercap/caplets /app/
 RUN /app/bettercap -no-colors -eval "ui.update; exit;"
+RUN "sed -i 's/8081/443/g' /usr/local/share/bettercap/ui/main.ec83a59338123ba3bb5d.js"
 WORKDIR /app
 
 EXPOSE 80 443 53 5300 8080 8081 8082 8083 8000
