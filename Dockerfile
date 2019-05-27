@@ -22,7 +22,7 @@ RUN apk add --update ca-certificates
 RUN apk add --no-cache --update bash iproute2 libpcap libusb-dev libnetfilter_queue wireless-tools
 COPY --from=build-env /go/src/github.com/bettercap/bettercap/bettercap /app/
 COPY --from=build-env /go/src/github.com/bettercap/bettercap/caplets /app/
-RUN /app/bettercap -eval "ui.update;"
+RUN /app/bettercap -no-colors -eval "ui.update; exit;"
 WORKDIR /app
 
 EXPOSE 80 443 53 5300 8080 8081 8082 8083 8000
